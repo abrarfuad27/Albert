@@ -21,7 +21,7 @@ export const useChatbot = () => {
 
     const chain = new ConversationChain({
       llm,
-      promptTemplate: template,
+      prompt: template,
     });
 
     const response = await chain.run({ input: message });
