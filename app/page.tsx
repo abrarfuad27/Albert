@@ -1,11 +1,9 @@
-import Image from "next/image";
+import Chatbot from "./components/Chatbot";
 
 export default function Home() {
   return (
-    <div>
-      <h1 className="text-4xl font-bold text-center mt-10">
-        Welcome to Next.js
-      </h1>
+    <div className="flex justify-center items-center h-screen bg-gray-50">
+      <Chatbot />
     </div>
   );
 }
