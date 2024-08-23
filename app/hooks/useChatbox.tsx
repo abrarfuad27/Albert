@@ -10,7 +10,8 @@ export const useChatbot = () => {
     setMessages((prev) => [...prev, `You: ${message}`]);
 
     const llm = new OpenAI({
-      openAIApiKey: process.env.OPENAI_API_KEY,
+      model: "gpt-4o-2024-05-13",
+      openAIApiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
       temperature: 0.7,
     });
 
@@ -24,7 +25,7 @@ export const useChatbot = () => {
       prompt: template,
     });
 
-    const response = await chain.run({ input: message });
+    const response = await chain.invoke({ input: message });
     setMessages((prev) => [...prev, `Assistant: ${response}`]);
   };
 
