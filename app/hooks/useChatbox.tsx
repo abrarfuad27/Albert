@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { OpenAI } from "@langchain/openai";
-import { ConversationChain } from "langchain/chains";
-import { PromptTemplate } from "@langchain/core/prompts";
+import axios from "axios";
 
 export const useChatbot = () => {
   const [messages, setMessages] = useState<string[]>([]);
@@ -9,24 +7,39 @@ export const useChatbot = () => {
   const sendMessage = async (message: string) => {
     setMessages((prev) => [...prev, `You: ${message}`]);
 
-    const llm = new OpenAI({
-      model: "gpt-4o-2024-05-13",
-      openAIApiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
-      temperature: 0.7,
-    });
+    // Prepare the prompt for Cohere
+    const prompt = `You are a helpful math proof assistant. Answer the following question:\n\nQuestion: ${message}`;
 
-    const template = new PromptTemplate({
-      template: `You are a helpful math proof assistant. Answer the following question:\n\nQuestion: {input}`,
-      inputVariables: ["input"],
-    });
+    try {
+      // Call Cohere API to get the response
+      const response = await axios.post(
+        "https://api.cohere.ai/generate",
+        {
+          model: "command", // Choose the model size based on your need
+          prompt: prompt,
+          max_tokens: 100, // Adjust the number of tokens as needed
+          temperature: 0.7, // Adjust the temperature for more or less creativity
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_COHERE_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    const chain = new ConversationChain({
-      llm,
-      prompt: template,
-    });
+      console.log(response);
+      const assistantResponse = response.data.text.trim();
 
-    const response = await chain.invoke({ input: message });
-    setMessages((prev) => [...prev, `Assistant: ${response}`]);
+      // Update the messages state with the assistant's response
+      setMessages((prev) => [...prev, `Assistant: ${assistantResponse}`]);
+    } catch (error) {
+      console.error("Error generating response:", error);
+      setMessages((prev) => [
+        ...prev,
+        "Assistant: Sorry, something went wrong.",
+      ]);
+    }
   };
 
   return { messages, sendMessage };

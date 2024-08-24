@@ -12,9 +12,10 @@
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
     "@mui/material": "^5.16.7",
+    "axios": "^1.7.5",
+    "cohere-ai": "^7.12.1",
     "langchain": "^0.2.16",
     "next": "14.2.5",
-    "openai": "^4.56.0",
     "react": "^18",
     "react-dom": "^18"
   },
