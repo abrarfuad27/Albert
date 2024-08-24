@@ -19,6 +19,7 @@ export const useChatbot = () => {
           prompt: prompt,
           max_tokens: 100, // Adjust the number of tokens as needed
           temperature: 0.7, // Adjust the temperature for more or less creativity
+          conversation_id: 'newuser1'
         },
         {
           headers: {

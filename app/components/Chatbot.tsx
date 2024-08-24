@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import { useChatbot } from "../hooks/useChatbox";
 
@@ -9,30 +9,35 @@ const Chatbot = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim()) {
-      await sendMessage(input);
       setInput("");
+      await sendMessage(input);
     }
   };
 
   return (
-    <div className="p-4">
-      <div className="border p-4 rounded h-64 overflow-y-auto bg-gray-100 text-black">
-        {messages.map((msg: string, idx: number) => (
-          <p key={idx}>{msg}</p>
-        ))}
+    <div className="chat-container">
+      <div className="chat-history">
+        {messages.map((msg: string, idx: number) => {
+          const isUser = msg.startsWith("You:");
+          return (
+            <div
+              key={idx}
+              className={`message ${isUser ? "user-message" : "bot-message"}`}
+            >
+              {msg}
+            </div>
+          );
+        })}
       </div>
-      <form onSubmit={handleSubmit} className="mt-4 flex">
+      <form onSubmit={handleSubmit} className="chat-input-container">
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          className="flex-grow p-2 border rounded text-black"
+          className="chat-input text-black"
           placeholder="Ask Albert a question"
         />
-        <button
-          type="submit"
-          className="ml-2 p-2 bg-blue-500 text-white rounded"
-        >
+        <button type="submit" className="send-button">
           Send
         </button>
       </form>
