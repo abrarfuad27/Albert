@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState } from "react";
@@ -11,8 +10,10 @@ import {
 import { auth } from "../config/firebaseConfig";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import useRedirectIfAuthenticated from "../hooks/useRedirectIfAuthenticated";
 
 const Login: React.FC = () => {
+  useRedirectIfAuthenticated(); // Redirect to home if authenticated
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

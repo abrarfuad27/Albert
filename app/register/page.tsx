@@ -5,8 +5,10 @@ import { TextField, Button, Typography, Container, Box } from "@mui/material";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config/firebaseConfig";
 import { useRouter } from "next/navigation";
+import useRedirectIfAuthenticated from "../hooks/useRedirectIfAuthenticated";
 
 const Signup: React.FC = () => {
+  useRedirectIfAuthenticated(); // Redirect to home if authenticated
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
