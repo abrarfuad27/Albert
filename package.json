@@ -12,7 +12,6 @@
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
     "@mui/material": "^5.16.7",
-    "axios": "^1.7.5",
     "cohere-ai": "^7.12.1",
     "firebase": "^10.13.0",
     "langchain": "^0.2.16",
