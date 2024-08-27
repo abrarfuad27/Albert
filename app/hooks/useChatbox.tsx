@@ -50,7 +50,7 @@ export const useChatbot = () => {
         body: JSON.stringify({
           model: "command",
           prompt: prompt,
-          max_tokens: 100,
+          max_tokens: 200,
           temperature: 0.7,
           stream: true,
         }),

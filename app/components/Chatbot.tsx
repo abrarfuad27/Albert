@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { useChatbot } from "../hooks/useChatbox";
+import "katex/dist/katex.min.css";
+import Latex from "react-latex-next";
 
 const Chatbot = () => {
   const { messages, sendMessage } = useChatbot();
@@ -24,7 +26,16 @@ const Chatbot = () => {
               key={idx}
               className={`message ${isUser ? "user-message" : "bot-message"}`}
             >
-              {msg}
+              <Latex
+                delimiters={[
+                  { left: "$$", right: "$$", display: true },
+                  { left: "\\(", right: "\\)", display: false },
+                  { left: "$", right: "$", display: false },
+                  { left: "\\[", right: "\\]", display: true },
+                ]}
+              >
+                {msg}
+              </Latex>
             </div>
           );
         })}
