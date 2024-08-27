@@ -1,12 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { auth, db } from "../config/firebaseConfig"; // Assuming firebaseConfig has both auth and db (Firestore) exports
+import { addDoc, collection } from "firebase/firestore";
+import { User } from "firebase/auth";
 
 export const useChatbot = () => {
   const [messages, setMessages] = useState<string[]>([]);
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      setUser(currentUser);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const storeMessageInFirestore = async (message: string) => {
+    if (user) {
+      try {
+        await addDoc(collection(db, "messages"), {
+          uid: user.uid,
+          message,
+          timestamp: new Date(),
+        });
+      } catch (error) {
+        console.error("Error storing message in Firestore:", error);
+      }
+    }
+  };
 
   const sendMessage = async (message: string) => {
-    setMessages((prev) => [...prev, `You: ${message}`]);
+    const userMessage = `You: ${message}`;
+    setMessages((prev) => [...prev, userMessage]);
 
-    const conversationHistory = messages.concat(`You: ${message}`).join("\n");
+    // Store the user's message in Firestore
+    await storeMessageInFirestore(userMessage);
+
+    const conversationHistory = messages.concat(userMessage).join("\n");
 
     const prompt = `You are a helpful math proof assistant. Continue the following conversation:\n\n${conversationHistory}\nAssistant:`;
 
@@ -36,8 +66,7 @@ export const useChatbot = () => {
           if (done) break;
 
           const chunk = decoder.decode(value);
-          // Parse each chunk as JSON
-          const parsedChunk = chunk.split("\n").filter(Boolean); // Filter out any empty lines
+          const parsedChunk = chunk.split("\n").filter(Boolean);
 
           parsedChunk.forEach((chunk) => {
             try {
@@ -58,12 +87,15 @@ export const useChatbot = () => {
                   }
                   return newMessages;
                 });
+
+                // Store the assistant's message in Firestore
               }
             } catch (e) {
               console.error("Error parsing JSON chunk:", e);
             }
           });
         }
+        await storeMessageInFirestore(`Assistant: ${assistantResponse}`);
       }
 
       console.log("Streaming complete");
