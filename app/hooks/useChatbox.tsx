@@ -55,7 +55,7 @@ export const useChatbot = () => {
           stream: true,
         }),
       });
-
+      console.log(response)
       const reader = response.body?.getReader();
       const decoder = new TextDecoder("utf-8");
 
