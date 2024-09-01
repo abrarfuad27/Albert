@@ -1,5 +1,6 @@
 "use client";
 import Chatbot from "./components/Chatbot";
+import ConversationHistory from "./components/ConversationHistory";
 import { auth } from "./config/firebaseConfig";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
@@ -20,14 +21,7 @@ export default function Home() {
 
   return (
     <div className="flex justify-between items-center h-screen bg-gray-50">
-      <div className="w-1/3 p-4 bg-white shadow-md rounded-lg">
-        {/* Chat history section */}
-        <div className="chat-history">
-          {user
-            ? `Welcome, ${user.displayName || user.email}!`
-            : "Sign in to access chat history"}
-        </div>
-      </div>
+      <ConversationHistory user={user} />
       <div className="w-2/3 p-4">
         <Chatbot />
       </div>

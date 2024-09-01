@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useChatbot } from "../hooks/useChatbox";
 import "katex/dist/katex.min.css"; // Import KaTeX styles
-import { BlockMath, InlineMath } from "react-katex"; // Import components for rendering LaTeX
+import { InlineMath } from "react-katex"; // Import components for rendering LaTeX
 
 const Chatbot = () => {
   const { messages, sendMessage } = useChatbot();
